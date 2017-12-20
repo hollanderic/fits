@@ -6,17 +6,32 @@
 #include <stdio.h>
 
 
-typedef char
+#define NUM_RECORDS 36
 
 class  Fits {
-	FILE *infile;
-	uint8_t *databuffer;
-	uint32_t bpp;
-	uint32_t width;
-	uint32_t height;
+
 
 public:
-	uint32_t fromFile(const char* fname);
+	Fits();
+	~Fits();
+	int32_t getWidth() {return width_;};
+	int32_t getHeight() {return height_;};
+	int32_t getDepth() {return bpp_;};
+	char* getBuffer() {return (char*)databuffer_;};
+
+
+	int32_t fromFile(const char* fname);
+
+	FILE *infile;
+
+private:
+	char records_[NUM_RECORDS][80];
+	uint8_t *databuffer_;
+	uint32_t datasize_;
+	uint32_t bpp_;
+	uint32_t width_;
+	uint32_t height_;
+
 };
 
 
