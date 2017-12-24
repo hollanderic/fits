@@ -28,8 +28,9 @@ public:
 	int32_t getDepth()  {return bpp_;};
 
 	// TODO - this needs to go away or offer better protections
-	char* getBuffer() {return (char*)databuffer_;};
-
+	char* getBuffer()   {return (char*)databuffer_;};
+	cv::Mat getMat()    {return cv::Mat(height_, width_,
+		                                CV_16UC1, (void*)databuffer_);};
 	void	printRecords();
 
 	static std::shared_ptr<Fits> Open(const char* fname);
@@ -55,20 +56,5 @@ private:
 	char  object_[70];
 	char  date_utc_[70];
 	char  creator_[70];
-};
-
-class FitsCV {
-public:
-	~FitsCV(){};
-	static std::shared_ptr<FitsCV> Open(const char* fname);
-	cv::Mat mat() {return raw_data_;};
-	int getHeight() {return fit_->height_;};
-	int getWidth() {return fit_->width_;};
-	void printRecords() {fit_->printRecords();};
-
-private:
-	FitsCV(){};
-	std::shared_ptr<Fits> fit_;
-	cv::Mat raw_data_;
 };
 

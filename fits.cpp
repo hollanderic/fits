@@ -85,20 +85,18 @@ std::shared_ptr<Fits> Fits::Open(const char* fname){
 
 	newfit->datasize_ = newfit->width_ * newfit->height_ * (newfit->bpp_ / 8);
 	newfit->databuffer_ = new uint8_t[newfit->datasize_];
+
 	infile.read((char*)newfit->databuffer_, newfit->datasize_);
 	uint32_t n = infile.gcount();
 	if (n != newfit->datasize_) {
 		return NULL;
 	}
-
-
 //TODO - more robust endian swap (FITS is big endian)
 	uint16_t *databuff = (uint16_t*)newfit->databuffer_;
 	for (int x=0; x< newfit->datasize_/(newfit->bpp_/8); x++) {
 		uint16_t temp = databuff[x];
 		databuff[x] = (((temp << 8)&0xff00) + (temp >>8)) - newfit->bzero_;
 	}
-
 	return std::move(newfit);
 }
 
@@ -112,18 +110,4 @@ void Fits::printRecords() {
 
 }
 
-std::shared_ptr<FitsCV> FitsCV::Open(const char* fname) {
-	std::shared_ptr<FitsCV> fit_cv;
-	fit_cv.reset(new FitsCV());
-	fit_cv->fit_ = Fits::Open(fname);
 
-	if (!fit_cv->fit_) return NULL;
-
-	fit_cv->raw_data_ = cv::Mat(fit_cv->fit_->getHeight(),
-								fit_cv->fit_->getWidth(),
-								CV_16UC1,
-								(void*)fit_cv->fit_->getBuffer()
-								);
-
-	return std::move(fit_cv);
-}
