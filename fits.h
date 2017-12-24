@@ -31,6 +31,8 @@ public:
 	char* getBuffer()   {return (char*)databuffer_;};
 	cv::Mat getMat()    {return cv::Mat(height_, width_,
 		                                CV_16UC1, (void*)databuffer_);};
+	cv::Mat getMat(float scale);
+	cv::Mat getMatRGB(float scale);
 	void	printRecords();
 
 	static std::shared_ptr<Fits> Open(const char* fname);

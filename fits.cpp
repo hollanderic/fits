@@ -110,4 +110,25 @@ void Fits::printRecords() {
 
 }
 
+cv::Mat Fits::getMat(float scale) {
+
+	cv::Mat im_preview_ = cv::Mat(static_cast<int>(height_ * scale),
+								  static_cast<int>(width_ * scale),
+								  CV_8UC3);
+  	resize(getMat(), im_preview_, im_preview_.size());
+  	return im_preview_;
+}
+
+cv::Mat Fits::getMatRGB(float scale) {
+ 	cv::Mat im_rgb = cv::Mat(height_, width_, CV_16UC3);
+  	cv::cvtColor(getMat(), im_rgb, cv::COLOR_BayerRG2RGB);
+
+	cv::Mat im_out = cv::Mat(static_cast<int>(height_ * scale),
+							 static_cast<int>(width_ * scale),
+							 CV_8UC3);
+  	resize(im_rgb, im_out, im_out.size());
+  	return im_out;
+}
+
+
 
