@@ -4,10 +4,14 @@
 #include <stdio.h>
 
 
+#include <opencv2/highgui.hpp>
+
 int main(int argc, const char **argv) {
 	//std::shared_ptr<Fits> f;
-	auto f=Fits::Open("300.fit");
-	printf("use count = %ld\n",f.use_count());
+	auto f=Fits::Open("500.fit");
+    f->printRecords();
+    imshow("plot", f->getMatRGB(0.24));
+    cv::waitKey();
 	return 0;
 
 }
